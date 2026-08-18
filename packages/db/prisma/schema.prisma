@@ -25,6 +25,7 @@ model Zap {
   trigger             Trigger?
 
   actiona             Action[]
+  zapRuns             ZapRun[]
 
   userId              String
   user                User        @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -35,6 +36,7 @@ model Zap {
   @@index([userId])
 }
 
+//trigger the event like send email
 model Trigger {
   id                  String      @id   @default(uuid())    @unique
   metadata            Json        @default("{}")
@@ -53,6 +55,7 @@ model AvailableTrigger {
   trigger             Trigger[]
 }
 
+// actions like when anything is commented on github
 model Action {
   id                  String      @id   @default(uuid())    @unique
   metadata            Json        @default("{}")
@@ -73,4 +76,18 @@ model AvailableAction {
   name                String
   image               String
   action              Action[]
+}
+
+model ZapRun {
+  id                  String       @id   @default(uuid())    @unique
+  zapId               String
+  metadata            Json
+  zap                 Zap          @relation(fields: [zapId], references: [id])
+  zapRunOutbox        ZapRunOutbox[]
+}
+
+model ZapRunOutbox {
+  id                  String       @id   @default(uuid())    @unique
+  zapRunId            String
+  zapRun              ZapRun       @relation(fields: [zapRunId], references: [id])
 }
