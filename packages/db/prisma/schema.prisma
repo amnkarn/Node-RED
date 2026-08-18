@@ -8,7 +8,69 @@ datasource db {
 }
 
 model User {
-  id            String      @id    @default(uuid())  @unique
-  email         String      @unique
-  password      String
+  id                  String      @id    @default(uuid())   @unique
+  name                String
+  email               String      @unique
+  password            String
+  zap                 Zap[]
+
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+}
+
+model Zap {
+  id                  String      @id   @default(uuid())    @unique
+  
+  triggerId           String
+  trigger             Trigger?
+
+  actiona             Action[]
+
+  userId              String
+  user                User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+
+  @@index([userId])
+}
+
+model Trigger {
+  id                  String      @id   @default(uuid())    @unique
+  metadata            Json        @default("{}")
+  
+  zapId               String      @unique
+  zaps                Zap         @relation(fields: [zapId], references: [id], onDelete: Cascade)
+
+  triggerId           String
+  type                AvailableTrigger  @relation(fields: [triggerId], references: [id])
+}
+
+model AvailableTrigger {
+  id                  String      @id   @default(uuid())    @unique
+  name                String      @unique
+  image               String
+  trigger             Trigger[]
+}
+
+model Action {
+  id                  String      @id   @default(uuid())    @unique
+  metadata            Json        @default("{}")
+  sortingOrder        Int         @default(0)
+  
+  zapId               String
+  zap                 Zap         @relation(fields: [zapId], references: [id], onDelete: Cascade)
+
+  actionId            String
+  type                AvailableAction @relation(fields: [actionId], references: [id])
+
+  @@index([zapId, sortingOrder]) //for fetching actions in order
+}
+
+// Github, Slack, Google Sheets, Gmail
+model AvailableAction {
+  id                  String       @id   @default(uuid())    @unique
+  name                String
+  image               String
+  action              Action[]
 }
