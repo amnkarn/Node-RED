@@ -1,5 +1,6 @@
 import { PrismaClient } from "./generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 import dotenv from "dotenv";
 dotenv.config({ path: "../../packages/db/.env" })
 
@@ -8,7 +9,13 @@ if(!DB_URL) {
     throw Error("DB_URL is missing");
 }
 
-const adapter = new PrismaPg({ connectionString: DB_URL });
+const pool = new Pool({ 
+    connectionString: DB_URL,
+    max: 5,
+    idleTimeoutMillis: 10_000,
+    connectionTimeoutMillis: 5_000, 
+});
+const adapter = new PrismaPg(pool);
 const prismaClient = new PrismaClient({ adapter });
 
 export default prismaClient;

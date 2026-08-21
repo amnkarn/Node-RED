@@ -16,8 +16,20 @@ authRouter.post("/verify-otp", async (req: Request, res: Response) => {
     }
 
     try {
-        const { email, password, otp } = data;
-    
+        const { name, email, password, otp } = data;
+        
+        //verify user is not registered
+        const found = await prismaClient.user.findUnique({
+            where: {
+                email: email
+            }
+        })
+        if(found) {
+            return res.status(400).json({
+                message: "User is already registered",
+            })
+        }
+
         //check otp
         const storedOtp = await client.get(`otp:${email}`);
         if(!storedOtp) {
@@ -31,21 +43,21 @@ authRouter.post("/verify-otp", async (req: Request, res: Response) => {
                 message: "Invalid otp"
             })
         }
-    
-        //if valid otp, then delete
-        await client.del(email);
+
+        await client.del(`otp:${email}`);
     
         const salt = await bcrypt.genSalt(6);
         const hash = await bcrypt.hash(password, salt);
     
         const user = await prismaClient.user.create({
             data: {
-                name: data.name,
-                email: data.email,
+                name: name,
+                email: email,
                 password: hash,
             }
         })
-    
+        console.log("after db call");
+        
         const secret = process.env.USER_SECRET!;
         assignToken(res, user.id, user.email, secret);
     
