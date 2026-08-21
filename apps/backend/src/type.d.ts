@@ -1,0 +1,10 @@
+import { Request } from "express";
+import type { JwtPayload } from "./types";
+
+declare global {
+    namespace Express {
+        interface Request {
+            user?: JwtPayload
+        }
+    }
+}

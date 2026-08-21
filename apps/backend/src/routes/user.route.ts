@@ -4,7 +4,7 @@ import crypto from "crypto";
 import { client } from "@repo/redis/client";
 import { sendOtpEmail } from "../utils/sendEmail";
 import bcrypt from "bcrypt";
-import { loginSchema } from "../types/types";
+import { loginSchema } from "../types";
 import { assignToken } from "../utils/assignToken";
 
 const userRouter: Router = Router();

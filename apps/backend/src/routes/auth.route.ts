@@ -1,5 +1,5 @@
 import { Router, type Request, type Response } from "express";
-import { registerSchema } from "../types/types";
+import { registerSchema } from "../types";
 import { client } from "@repo/redis/client";
 import bcrypt from "bcrypt";
 import prismaClient from "@repo/db/client";

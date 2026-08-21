@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { string, z } from "zod";
 
 export const registerSchema = z.object({
     name: z
@@ -29,4 +29,9 @@ export const loginSchema = z.object({
         .string()
         .min(3)
         .max(50)
+})
+
+export const JwtPayload = z.object({
+    id: z.string(),
+    email: string()
 })
