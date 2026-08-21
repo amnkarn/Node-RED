@@ -3,6 +3,7 @@ import prismaClient from "@repo/db/client";
 
 const app = express();
 
+//hooks app work is to receive req from external service, and create ZapRun + ZapRunOutbox
 app.post("/hooks/catch/:userId/:zapId", async (req, res) => {
     const { userId, zapId } = req.params;
     const metadata = req.body;

@@ -8,10 +8,11 @@ const kafka = new Kafka({
 
 const TOPIC_NAME = "zap-events"
 
+//processor app work is to 
 async function main() {
     const producer = kafka.producer();
     
-    while(1) {
+    while(1) { //should do poling in few seconds
         const pendingRows = await prismaClient.zapRunOutbox.findMany({
             take: 10,
         });
@@ -24,7 +25,7 @@ async function main() {
         await prismaClient.zapRunOutbox.deleteMany({
             where: {
                 id: {
-                    in: pendingRows.map(x => x.id)
+                    in: pendingRows.map(x => x.id),
                 }
             }
         })
