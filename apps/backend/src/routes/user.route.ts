@@ -6,6 +6,7 @@ import { sendOtpEmail } from "../utils/sendEmail";
 import bcrypt from "bcrypt";
 import { loginSchema } from "../types";
 import { assignToken } from "../utils/assignToken";
+import { authMiddleware } from "../middleware/authMiddleware";
 
 const userRouter: Router = Router();
 
@@ -90,5 +91,23 @@ userRouter.post("/signin", async (req, res) => {
         })
     }
 })
+
+userRouter.get("/", authMiddleware, async (req, res) => {
+    const userId = req.user?.id;
+    
+    const user = await prismaClient.user.findUnique({
+        where: {
+            id: userId,
+        },
+        select: {
+            name: true,
+            email: true,
+            createdAt: true,
+        }
+    })
+
+    res.status(200).json(user);
+})
+
 
 export default userRouter;

@@ -31,7 +31,7 @@ export const loginSchema = z.object({
         .max(50)
 })
 
-export const JwtPayload = z.object({
-    id: z.string(),
-    email: string()
-})
+export interface JwtPayload {
+    id: string,
+    email: string,
+}

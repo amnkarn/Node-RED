@@ -2,8 +2,9 @@ import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import type { JwtPayload } from "../types";
 
-export const userMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.token;
+
     if(!token) {
         return res.status(401).json({
             message: "Unauthorised"
