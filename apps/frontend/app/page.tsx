@@ -1,10 +1,10 @@
 
 
 
-export default function Home() {
+export default function Landing() {
   return (
     <div className="bg-white">
-      heyyyyyy
+      landing page
     </div>
   );
 }

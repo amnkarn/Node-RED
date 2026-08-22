@@ -4,7 +4,6 @@ import prismaClient from "@repo/db/client";
 import { authMiddleware } from "../middleware/authMiddleware";
 
 
-
 const zapRouter: Router = Router();
 
 zapRouter.post("/", authMiddleware, async (req, res) => {
@@ -156,6 +155,8 @@ zapRouter.put("/:zapId", authMiddleware, async (req, res) => {
                         zapId: (zapId as string),
                     },
                     data: {
+                        //...(true && { triggerId: data.availableTriggerId })
+                        //...{ triggerId: data.availableTriggerId } => triggerId: data.availableTriggerId
                         ...(data.availableTriggerId && {
                             triggerId: data.availableTriggerId,
                         }),
