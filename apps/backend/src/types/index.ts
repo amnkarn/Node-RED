@@ -35,3 +35,26 @@ export interface JwtPayload {
     id: string,
     email: string,
 }
+
+export const ZapCreateSchema = z.object({
+    //available Triggeres id
+    availableTriggerId: z.string(),
+    triggerMetaData: z.any().optional(),
+    actions: z.array(
+        z.object({
+            availableActionId: z.string(),
+            actionMetaData: z.string(),
+        })
+    )
+})
+
+export const ZapUpdateSchema = z.object({
+    availableTriggerId: z.string().optional(),
+    triggerMetaData: z.any().optional(),
+    actions: z.array(
+        z.object({
+            availableActionId: z.string(),
+            actionMetaData: z.any().optional(),
+        })
+    ).optional()
+})

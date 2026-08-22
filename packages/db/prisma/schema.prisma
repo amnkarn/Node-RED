@@ -24,7 +24,7 @@ model Zap {
   triggerId           String
   trigger             Trigger?
 
-  actiona             Action[]
+  actions             Action[]
   zapRuns             ZapRun[]
 
   userId              String
