@@ -1,6 +1,7 @@
 import AuthNav from "@/components/auth/NavBar";
 import { Check } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 
 export default function Signup() {
@@ -49,10 +50,10 @@ function Body() {
                         Get started for free
                     </button>
 
-                    <p className="text-[15px] text-zinc-600 place-self-center">
+                    <Link href={"/login"} className="text-[15px] text-zinc-600 place-self-center">
                         Already have an account? &nbsp; 
                         <span className="underline hover:no-underline cursor-pointer">Log In</span>
-                    </p>
+                    </Link>
                 </div>
             </div>
         </div>
