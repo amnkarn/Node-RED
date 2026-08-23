@@ -56,11 +56,11 @@ export default function Hero() {
 
                     {/* MCP */}
                     <div className="flex items-center justify-between gap-4 pt-10" >
-                        <McpModal img="/claud.png" name="Claud" />
-                        <McpModal img="/claudcode.png" name="Claud Code" />
-                        <McpModal img="/chatgpt.png" name="ChatGPT" />
-                        <McpModal img="/cursor.png" name="Cursor" />
-                        <McpModal img="/claw.png" name="Claw" size={50} />
+                        <McpModal img="/claud.png" name="Claud" to="/home" />
+                        <McpModal img="/claudcode.png" name="Claud Code" to="/home" />
+                        <McpModal img="/chatgpt.png" name="ChatGPT" to="/home" />
+                        <McpModal img="/cursor.png" name="Cursor" to="/home" />
+                        <McpModal img="/claw.png" name="Claw" size={50} to="/home" />
                     </div>
                 </div>
             </div>
@@ -68,11 +68,11 @@ export default function Hero() {
     )
 }
 
-function McpModal({img, name, size}: {img: string, name: string, size?: number}) {
+function McpModal({img, name, size, to}: {img: string, name: string, size?: number, to: string}) {
     return (
-        <div className="flex flex-col items-center justify-center gap-1 bg-white border border-zinc-200 hover:border-zinc-600 cursor-pointer w-25 h-25">
+        <Link href={to} className="flex flex-col items-center justify-center gap-1 bg-white border border-zinc-200 hover:border-zinc-600 cursor-pointer w-25 h-25" >
             <Image src={img} alt="#claud" width={size ? size : 40} height={size ? size : 40} />
             <p className="text-black" >{name}</p>
-        </div>
+        </Link>
     )
 }

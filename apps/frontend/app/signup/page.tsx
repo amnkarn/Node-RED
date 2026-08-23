@@ -44,9 +44,7 @@ function Body() {
                         By signing up, you agree to Zapier&apos;s <span className="underline hover:no-underline">terms of service</span> and <span className="underline hover:no-underline">privacy policy</span>.
                     </p>
 
-                    <button 
-                        className="px-4 py-3 rounded-md bg-[#FF4F00] font-semibold text-white cursor-pointer"
-                        >
+                    <button className="px-4 py-3 rounded-md bg-[#FF4F00] font-semibold text-white cursor-pointer" >
                         Get started for free
                     </button>
 

@@ -5,7 +5,15 @@ import indexRouter from "./routes/index.route";
 import cookieParser from "cookie-parser";
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || origin.startsWith("http://localhost:")) {
+            return callback(null, true);
+        }
+        return callback(null, origin);
+    },
+    credentials: true,
+}));
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());

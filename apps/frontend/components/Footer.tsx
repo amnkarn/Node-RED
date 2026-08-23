@@ -109,7 +109,7 @@ export default function Footer() {
                     </div>
 
                     <div className="flex items-center justify-center gap-2 text-sm text-zinc-700">
-                        <ul>© 2026 Zapier Inc.</ul>
+                        <ul>© 2026 Node-RED Inc.</ul>
                         <ul>Manage cookies</ul>
                         <ul>Legal</ul>
                         <ul>Privacy</ul>
