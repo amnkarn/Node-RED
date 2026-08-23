@@ -1,13 +1,14 @@
 "use client";
 import AuthNav from "@/components/auth/NavBar";
 import Loader from "@/components/Loader";
-import { AlertCircle, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChangeEventHandler, useState } from "react";
 import { BACKEND_URL } from "../config";
 import { useRouter } from "next/navigation";
 import OtpBox from "@/components/OtpBox";
+import AlertBanner from "@/components/AlertBanner";
 
 
 export default function Signup() {
@@ -32,11 +33,6 @@ function Body() {
     const [otpState, setOtpState] = useState<boolean>(false);
     const router = useRouter();
 
-    function clearInputs() {
-        setFormData({email: "", name: "", password: ""});
-        setOtp(null);
-    }
-
     const handleInputChange = (key: keyof typeof formData, value: string) => {
         setFormData(prev => ({
             ...prev,
@@ -45,11 +41,10 @@ function Body() {
     }
 
     async function sendOtp() {
-        if (!formData.email) {
-            setError('Please enter your email address');
+        if (!formData.email || !formData.name || !formData.password) {
+            setError('Please fill in all required fields (Email, Name, Password)');
             return;
         }
-        console.log(formData.email);
         setError('');
 
         try {
@@ -62,7 +57,7 @@ function Body() {
             })
 
             if (!res.ok) {
-                let msg = "Invalid credentials";
+                let msg = "User already registered or invalid email";
                 try {
                     const data = await res.json();
                     if (data && typeof data.message === "string") {
@@ -72,11 +67,10 @@ function Body() {
                     // JSON parse failed
                 }
                 setError(msg);
-                clearInputs();
                 return;
             }
 
-            //give otp box input
+            // switch to OTP view
             setOtpState(true);
 
         } catch (error: unknown) {
@@ -84,19 +78,21 @@ function Body() {
             if (error instanceof Error) {
                 setError(error.message);
             } else setError("Something went wrong");
-            
-            clearInputs();
         } finally {
             setLoading(false);
         }
     }
 
     async function handleSubmit() {
-        if(!formData) {
-            setError('Please enter your email address');
+        if (!formData.email || !formData.name || !formData.password) {
+            setError('Missing required registration data. Please refresh and try again.');
             return;
         }
-        console.log(formData.email, formData.name, formData.password, otp);
+        if (!otp) {
+            setError('Please enter the 6-digit verification OTP code.');
+            return;
+        }
+        setError('');
 
         try {
             setLoading(true);
@@ -111,10 +107,9 @@ function Body() {
                     otp
                 }),
             })
-            //console.log(registerRes);
 
             if (!registerRes.ok) {
-                let msg = "Invalid credentials";
+                let msg = "Invalid OTP code or user exists";
                 try {
                     const data = await registerRes.json();
                     if (data && typeof data.message === "string") {
@@ -124,12 +119,10 @@ function Body() {
                     // Json parse failed
                 }
                 setError(msg);
-                clearInputs();
                 return;
             }
 
-            alert("You are successfully signed up")
-            router.push("/home?registered=true");
+            router.push("/home");
 
         } catch (error: unknown) {
             console.log(error);
@@ -137,8 +130,6 @@ function Body() {
             if (error instanceof Error) {
                 setError(error.message);
             } else setError("Something went wrong");
-
-            clearInputs();
         } finally {
             setLoading(false);
         }
@@ -167,12 +158,7 @@ function Body() {
 
                 <div className="border border-zinc-300 rounded-lg py-5 px-7 flex flex-col gap-4 relative">
                     {/* show error message */}
-                    {error && (
-                        <div className="w-full flex items-center gap-2.5 p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
-                            <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
-                            <span className="font-medium text-xs sm:text-sm">{error}</span>
-                        </div>
-                    )}
+                    <AlertBanner message={error} onClose={() => setError('')} type="error" />
 
                     { otpState ? <OtpBox onChange={(otp) => setOtp(otp)} /> : 
                         (
