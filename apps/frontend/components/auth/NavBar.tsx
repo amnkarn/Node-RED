@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ChevronDown, Grid2x2X } from "lucide-react";
+import { ChevronDown, Grid2x2X, CircleQuestionMark } from "lucide-react";
 
-export default function Appbar() {
+
+export default function AuthNav({type}: {type: "Signup" | "Login"}) {
     return (
         <nav className="w-full h-14 flex items-center justify-between px-8 text-sm text-black border-b border-zinc-200">
             <ul className="flex justify-center items-center gap-5">
@@ -12,38 +13,44 @@ export default function Appbar() {
                         <span className="text-2xl font-extrabold">Node-RED</span>
                     </Link>
                 </div>
-
-                <ListElem name="Products" scrollIcon={true} />
-                <ListElem name="Solutions" scrollIcon={true} />
-                <ListElem name="Resources" scrollIcon={true} />
-                <ListElem name="Enterprice" scrollIcon={true} />
-                <ListElem name="Prising" scrollIcon={true} />
             </ul>
 
-            <ul className="flex justify-center items-center gap-5">
-                <ListElemWithIcon name="Github" icon="fa-github" />
+            <ul className="flex justify-center items-center gap-5 pr-2">
+                <ListElemWithIcon 
+                    name="Help" 
+                    iconElem={
+                        <CircleQuestionMark className="h-5 w-5" />
+                    }
+                />
                 <ListElemWithIcon 
                     name="Explore apps" 
                     iconElem={
                         <Grid2x2X className="h-4 w-4 rotate-180 scale-x-[-1]" />
                     } 
                 />
-                <ListElem name="Contact Sales" />
-                <ListElem href="/login" name="Log in" />
-                <Link 
-                    className="rounded-3xl bg-[#FF4F00] hover:bg-[#D24304] text-white py-2 px-3 font-bold cursor-pointer"
-                    href={"/signup"} >
-                    Sign up
-                </Link>
+                <ListElem name="Contact Sales" border={true} />
+                { type === "Signup" ?
+                    <ListElem href="/login" name="Log in" /> :
+                    <Link 
+                        className="rounded-3xl bg-[#FF4F00] hover:bg-[#D24304] text-white py-2 px-3 font-bold cursor-pointer"
+                        href={"/signup"} >
+                        Sign up
+                    </Link>
+                }
             </ul>
             
         </nav>
     )
 }
 
-function ListElem({name, href, scrollIcon}: {name: string, href?: string, scrollIcon?: boolean}) {
+function ListElem({name, href, scrollIcon, border}: {
+    name: string, 
+    href?: string, 
+    scrollIcon?: boolean, 
+    border?: boolean
+}) {
     return (
-        <Link href={href || "#"} className="flex gap-1 items-center hover:bg-[#F8F4F0] rounded-sm cursor-pointer py-2 px-2">
+        <Link href={href || "#"} className={`flex gap-1 items-center hover:bg-[#F8F4F0] rounded-sm cursor-pointer py-2 px-2 ${border && "border border-zinc-300"}`}>
             { name } 
             {scrollIcon && <ChevronDown className="h-4 w-4" />}
         </Link>

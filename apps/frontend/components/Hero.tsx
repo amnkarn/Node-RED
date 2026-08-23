@@ -1,5 +1,6 @@
 import { ShieldPlus, Globe } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Hero() {
     return (
@@ -13,13 +14,13 @@ export default function Hero() {
                     </p>
 
                     <div className="flex items-center gap-10 py-8">
-                        <button className="bg-[#FF4F00] hover:bg-[#D24304] py-2 px-3 rounded-sm font-bold cursor-pointer">
+                        <Link href={"/signup"} className="bg-[#FF4F00] hover:bg-[#D24304] py-2 px-3 rounded-sm font-bold cursor-pointer">
                             Start free with email
-                        </button>
+                        </Link>
 
-                        <button className="border border-zinc-950 hover:border-zinc-300 transition-transform py-2 px-3 rounded-sm text-black font-bold cursor-pointer">
+                        <Link href={"/login"} className="border border-zinc-950 hover:border-zinc-300 transition-transform py-2 px-3 rounded-sm text-black font-bold cursor-pointer">
                             Login
-                        </button>
+                        </Link>
                     </div>
 
                     <div className="flex items-center  gap-5">
