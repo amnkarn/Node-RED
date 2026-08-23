@@ -43,7 +43,7 @@ function Body() {
                 credentials: 'include',
                 body: JSON.stringify({ email, password }),
             });
-            console.log(response);
+            //console.log(response);
             if(!response.ok) {
                 let msg = "Invalid credentials";
                 try {
@@ -61,9 +61,13 @@ function Body() {
 
             router.push("/home");
 
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.log(err);
-            setError(err?.message || "Something went wrong");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else setError("Something went wrong");
+
             clearInputs();
         } finally {
             setLoading(false);
@@ -107,8 +111,20 @@ function Body() {
                         </div>
                     )}
 
-                    <InputBox lable="Email" type="email" placeholder="test@gmail.com" ref={emailRef} onChange={() => setError('')} />
-                    <InputBox lable="Password" type="password" placeholder="" ref={passwordRef} onChange={() => setError('')} />
+                    <InputBox 
+                        lable="Email" 
+                        type="email" 
+                        placeholder="test@gmail.com" 
+                        ref={emailRef} 
+                        onChange={() => setError('')} 
+                    />
+                    <InputBox 
+                        lable="Password" 
+                        type="password" 
+                        placeholder="" 
+                        ref={passwordRef} 
+                        onChange={() => setError('')} 
+                    />
 
                     <button className="px-4 py-3 rounded-md bg-[#FF4F00] font-semibold text-white cursor-pointer" onClick={handleLogin} >
                         Continue
@@ -146,6 +162,7 @@ function InputBox({
                 placeholder={placeholder} 
                 ref={ref}
                 onChange={onChange}
+                required={true}
                 className="w-full py-3 pl-3 border border-zinc-300 rounded-md"
             />
         </div>

@@ -9,6 +9,7 @@ const authRouter: Router = Router();
 
 authRouter.post("/verify-otp", async (req: Request, res: Response) => {
     const { success, data } = registerSchema.safeParse(req.body);
+    console.log(data);
     if(!success) {
         return res.status(400).json({
             message: "Invalid inputs"
