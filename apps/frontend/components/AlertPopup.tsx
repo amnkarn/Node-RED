@@ -16,6 +16,7 @@ export default function AlertPopup({
     duration = 4000,
     onClose
 }: AlertPopupProps) {
+    
     const [visible, setVisible] = useState<boolean>(true);
 
     useEffect(() => {

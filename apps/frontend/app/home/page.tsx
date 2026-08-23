@@ -13,6 +13,7 @@ export default function Home() {
         hasExecuted.current = true;
 
         const searchParams = new URLSearchParams(window.location.search);
+        
         if (searchParams.get("registered") === 'true') {
             setPopupType("success");
             setPopupMessage("Registration successful! Welcome to your automated workspace.");

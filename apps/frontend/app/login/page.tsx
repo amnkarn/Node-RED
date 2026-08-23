@@ -3,10 +3,10 @@ import AuthNav from "@/components/auth/NavBar";
 import Loader from "@/components/Loader";
 import Image from "next/image";
 import Link from "next/link";
-import { Ref, useRef, useState } from "react";
+import { useState } from "react";
 import { BACKEND_URL } from "../config";
 import { useRouter } from "next/navigation";
-import AlertBanner from "@/components/AlertBanner";
+import { AlertCircle } from "lucide-react";
 
 
 export default function Login() {
@@ -107,7 +107,12 @@ function Body() {
                 <h1 className="text-2xl font-bold">Log in to your account</h1>
                 <div className="w-full border border-zinc-300 rounded-lg py-10 px-7 flex flex-col gap-4 relative">
                     {/* show error message */}
-                    <AlertBanner message={error} onClose={() => setError('')} type="error" />
+                    {error && (
+                        <div className="w-full flex items-center gap-2.5 p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+                            <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
+                            <span className="font-medium text-xs sm:text-sm">{error}</span>
+                        </div>
+                    )}
 
                     <InputBox 
                         lable="Email" 
