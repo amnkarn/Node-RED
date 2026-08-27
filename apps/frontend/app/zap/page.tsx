@@ -1,5 +1,11 @@
-import { redirect } from "next/navigation";
+import { useParams } from "next/navigation"
 
 export default function ZapPage() {
-  redirect("/zaps");
+  const params = useParams();
+
+  return (
+    <div>
+      hey
+    </div>
+  )
 }

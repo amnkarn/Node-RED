@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import Loader from "@/components/Loader";
@@ -13,52 +12,11 @@ import {
   Copy,
   Check,
   ChevronRight,
-  MoreVertical,
-  ExternalLink,
-  RefreshCw,
-  Clock,
-  ArrowRight,
-  Filter
+  ArrowRight
 } from "lucide-react";
-
-interface ActionType {
-  id: string;
-  name: string;
-  image?: string;
-}
-
-interface TriggerType {
-  id: string;
-  name: string;
-  image?: string;
-}
-
-interface Action {
-  id: string;
-  zapId: string;
-  actionId: string;
-  sortingOrder: number;
-  metadata?: any;
-  type?: ActionType;
-}
-
-interface Trigger {
-  id: string;
-  zapId: string;
-  triggerId: string;
-  metadata?: any;
-  type?: TriggerType;
-}
-
-interface Zap {
-  id: string;
-  triggerId: string;
-  userId: string;
-  createdAt?: string;
-  updatedAt?: string;
-  trigger?: Trigger;
-  actions: Action[];
-}
+import Image from "next/image";
+import { Zap } from "@/types";
+import ZapsHeader from "@/components/zaps/Header";
 
 export default function ZapsPage() {
   const [zaps, setZaps] = useState<Zap[]>([]);
@@ -81,16 +39,21 @@ export default function ZapsPage() {
       }
 
       const data = await res.json();
-      setZaps(Array.isArray(data) ? data : data.zaps || []);
-    } catch (err: any) {
+      setZaps(data);
+
+    } catch (err: unknown) {
       console.error("Error fetching zaps:", err);
-      setError(err.message || "Failed to fetch Zaps");
+      if (err instanceof Error) {
+        setError(err.message);
+      } else setError("Something went wrong");
+
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchZaps();
   }, []);
 
@@ -112,37 +75,37 @@ export default function ZapsPage() {
     );
   });
 
+  if (loading || error) {
+    return (
+      <Sidebar>
+        <div className="p-8 max-w-7xl mx-auto space-y-6">
+          {loading
+            ?
+            <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-slate-200 shadow-sm">
+              <Loader />
+              <p className="text-sm text-slate-500 mt-4">Loading your workflows...</p>
+            </div>
+            :
+            <div className="p-6 bg-red-50 border border-red-200 rounded-2xl text-center">
+              <p className="text-sm font-semibold text-red-600">{error}</p>
+              <button
+                onClick={fetchZaps}
+                className="mt-3 text-xs font-semibold text-red-700 underline hover:text-red-800"
+              >
+                Try again
+              </button>
+            </div>
+          }
+        </div>
+      </Sidebar>
+    )
+  }
+
+
   return (
     <Sidebar>
       <div className="p-8 max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
-          <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
-              <ZapIcon className="w-7 h-7 text-orange-500 fill-orange-500" />
-              <span>Zaps</span>
-            </h1>
-            <p className="text-sm text-slate-500 mt-1">
-              View and manage all your automated workflows in one place.
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={fetchZaps}
-              className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors border border-slate-200"
-              title="Refresh Zaps"
-            >
-              <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
-            </button>
-            <Link
-              href="/zap/create"
-              className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow transition-all text-sm"
-            >
-              <Plus className="w-4 h-4 stroke-[2.5]" />
-              <span>Create Zap</span>
-            </Link>
-          </div>
-        </div>
+        <ZapsHeader onClick={fetchZaps} loading={loading} />
 
         {/* Search & Toolbar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -157,28 +120,15 @@ export default function ZapsPage() {
             />
           </div>
           <div className="text-xs font-medium text-slate-500">
-            Showing <span className="font-bold text-slate-800">{filteredZaps.length}</span> of{" "}
+            Showing&nbsp;
+            <span className="font-bold text-slate-800">{filteredZaps.length}&nbsp;</span>
+            of{" "}
             <span className="font-bold text-slate-800">{zaps.length}</span> Zaps
           </div>
         </div>
 
         {/* Content Section */}
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-slate-200 shadow-sm">
-            <Loader />
-            <p className="text-sm text-slate-500 mt-4">Loading your workflows...</p>
-          </div>
-        ) : error ? (
-          <div className="p-6 bg-red-50 border border-red-200 rounded-2xl text-center">
-            <p className="text-sm font-semibold text-red-600">{error}</p>
-            <button
-              onClick={fetchZaps}
-              className="mt-3 text-xs font-semibold text-red-700 underline hover:text-red-800"
-            >
-              Try again
-            </button>
-          </div>
-        ) : filteredZaps.length === 0 ? (
+        {filteredZaps.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4 bg-white rounded-2xl border border-slate-200 shadow-sm text-center">
             <div className="w-16 h-16 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center mb-4">
               <ZapIcon className="w-8 h-8 fill-orange-500" />
@@ -191,6 +141,7 @@ export default function ZapsPage() {
                 ? `No Zaps match "${searchQuery}". Try a different keyword.`
                 : "Create your first Zap to automate repetitive tasks between your favorite apps."}
             </p>
+
             {!searchQuery && (
               <Link
                 href="/zap/create"
@@ -206,7 +157,7 @@ export default function ZapsPage() {
             {/* Table Header */}
             <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-slate-50/80 text-xs font-bold uppercase tracking-wider text-slate-500">
               <div className="col-span-5 sm:col-span-4">Workflow Flow</div>
-              <div className="col-span-4 sm:col-span-4 hidden sm:block">Webhook URL</div>
+              <div className="col-span-4 sm:col-span-4 hidden sm:block">Workflow Id</div>
               <div className="col-span-4 sm:col-span-2 text-center">Actions</div>
               <div className="col-span-3 sm:col-span-2 text-right">Details</div>
             </div>
@@ -230,9 +181,11 @@ export default function ZapsPage() {
                         title={`Trigger: ${triggerName}`}
                       >
                         {triggerImg ? (
-                          <img
+                          <Image
                             src={triggerImg}
                             alt={triggerName}
+                            width={20}
+                            height={20}
                             className="w-5 h-5 object-contain"
                             onError={(e) => {
                               (e.target as HTMLElement).style.display = "none";
@@ -257,9 +210,11 @@ export default function ZapsPage() {
                               title={`Action: ${act.type?.name || "Action"}`}
                             >
                               {act.type?.image ? (
-                                <img
+                                <Image
                                   src={act.type.image}
                                   alt={act.type.name}
+                                  height={4}
+                                  width={4}
                                   className="w-4 h-4 object-contain"
                                   onError={(e) => {
                                     (e.target as HTMLElement).style.display = "none";
@@ -276,6 +231,7 @@ export default function ZapsPage() {
                       )}
                     </div>
 
+                    {/* Workflow name and id */}
                     <div className="hidden lg:flex flex-col ml-2 truncate">
                       <span className="text-sm font-bold text-slate-800 truncate">
                         {triggerName} Workflow
@@ -288,8 +244,8 @@ export default function ZapsPage() {
 
                   {/* Webhook Copy Column */}
                   <div className="col-span-4 sm:col-span-4 hidden sm:flex items-center gap-2">
-                    <div className="bg-slate-100 px-3 py-1.5 rounded-lg text-xs font-mono text-slate-600 truncate max-w-[240px] border border-slate-200/60">
-                      /hooks/catch/.../{zap.id.slice(0, 8)}
+                    <div className="bg-slate-100 px-3 py-1.5 rounded-lg text-xs font-mono text-slate-600 truncate max-w-60 border border-slate-200/60">
+                      {zap.id}
                     </div>
                     <button
                       onClick={() => handleCopyWebhook(zap.userId, zap.id)}
