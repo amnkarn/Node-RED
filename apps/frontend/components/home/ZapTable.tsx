@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useState } from "react";
 
 
-
 export default function ZapTable({ zaps }: { zaps: Zap[] }) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -36,7 +35,7 @@ export default function ZapTable({ zaps }: { zaps: Zap[] }) {
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden divide-y divide-slate-100">
       <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-slate-50 text-xs font-bold uppercase tracking-wider text-slate-500">
         <div className="col-span-5 sm:col-span-4">Workflow Flow</div>
-        <div className="col-span-4 sm:col-span-4 hidden sm:block">Webhook URL</div>
+        <div className="col-span-4 sm:col-span-4 hidden sm:block">Workflow Id</div>
         <div className="col-span-4 sm:col-span-2 text-center">Actions</div>
         <div className="col-span-3 sm:col-span-2 text-right">Action</div>
       </div>
@@ -109,7 +108,7 @@ export default function ZapTable({ zaps }: { zaps: Zap[] }) {
 
             <div className="col-span-4 sm:col-span-4 hidden sm:flex items-center gap-2">
               <div className="bg-slate-100 px-3 py-1.5 rounded-lg text-xs font-mono text-slate-600 truncate max-w-60 border border-slate-200/60">
-                /hooks/catch/.../{zap.id.slice(0, 8)}
+                {zap.id}
               </div>
               <button
                 onClick={() => handleCopyWebhook(zap.userId, zap.id)}
