@@ -36,7 +36,7 @@ return (
     <div className="flex min-h-screen bg-slate-50 text-slate-900">
         {/* Sidebar Navigation */}
         <aside className={`bg-white border-r border-slate-200 flex flex-col justify-between items-center shrink-0 select-none ${state === "expanded" ? "w-64" : "w-16"}`}>
-            <div>
+            <div className="w-full">
                 {/* Logo */}
                 <div className={`h-16 flex items-center border-b border-slate-100 gap-2 ${state==="expanded" ? "px-2" : "justify-center"}`}>
                     <Link href="/home" className="flex items-center gap-2 group">
@@ -56,7 +56,7 @@ return (
                 <div className={`p-4 ${state==="expanded" ? "" : "flex justify-center"}`}>
                     <Link
                         href="/zap/create"
-                        className={`flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold ${state==="expanded" ? "rounded-xl w-full py-2.5 px-4" : "rounded-xl w-10 h-10 py-2.5"}`}
+                        className={`flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold ${state==="expanded" ? "rounded-xl w-full py-2.5 px-4" : "rounded-4xl w-12 h-8"}`}
                     >
                         <Plus className="w-4 h-4 stroke-[2.5]" />
                         {state==="expanded" ? <span>Create Zap</span> : "" }
